@@ -1,8 +1,7 @@
-/**
- * @file Example Router for /status
- * @author Aaron Osher
- * @copyright HackSoc Nottingham 2019
- */
+// Copyright (c) 2020 HackSoc Nottingham
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
 import { Router, Request, Response } from 'express';
 import Joi from '@hapi/joi';

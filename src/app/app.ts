@@ -1,8 +1,7 @@
-/**
- * @file Manages the root express application
- * @author Aaron Osher
- * @copyright HackSoc Nottingham 2019
- */
+// Copyright (c) 2020 HackSoc Nottingham
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
 import bodyParser from 'body-parser';
 import cors from 'cors';

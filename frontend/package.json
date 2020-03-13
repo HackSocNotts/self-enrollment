@@ -1,0 +1,87 @@
+{
+  "name": "website",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.9.5",
+    "connected-react-router": "^6.5.2",
+    "history": "^4.9.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.1.0",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "^3.4.0",
+    "redux": "^4.0.4",
+    "redux-thunk": "^2.3.0",
+    "typescript": "3.5.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "lint": "npm run lint:js && npm run lint:style",
+    "lint:fix": "npm run lint:js:fix && npm run lint:style:fix",
+    "lint:js": "eslint . --ignore-path .gitignore --ext .js,.ts,.jsx,.tsx",
+    "lint:js:staged": "eslint --ignore-path .gitignore",
+    "lint:js:fix": "npm run lint:js -- --fix",
+    "lint:style": "stylelint --ignore-path .gitignore \"src/**.*scss\" \"src/**.*css\"",
+    "lint:style:staged": "stylelint --ignore-path .gitignore",
+    "lint:style:fix": "npm run lint:style -- --fix",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/history": "^4.7.2",
+    "@types/jest": "24.0.15",
+    "@types/node": "12.6.1",
+    "@types/react": "^16.8.23",
+    "@types/react-dom": "16.8.4",
+    "@types/react-redux": "^7.1.1",
+    "@types/react-router-dom": "^4.3.4",
+    "@types/redux": "^3.6.0",
+    "@types/redux-thunk": "^2.1.0",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "babel-plugin-import": "^1.12.0",
+    "customize-cra": "^0.4.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-jsdoc": "^15.7.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
+    "husky": "^3.0.1",
+    "jest-junit": "^7.0.0",
+    "lint-staged": "^9.2.1",
+    "prettier": "^1.18.2",
+    "stylelint": "^10.1.0",
+    "stylelint-config-prettier": "^5.2.0",
+    "stylelint-config-recommended": "^2.2.0",
+    "stylelint-junit-formatter": "^0.2.1"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "npm run lint:js:staged"
+    ],
+    "*.{css,less}": [
+      "npm run lint:style:staged"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}

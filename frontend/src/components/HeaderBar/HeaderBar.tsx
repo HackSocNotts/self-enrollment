@@ -9,7 +9,7 @@ const HeaderBar: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <AppBar position="relative">
+    <AppBar position="relative" variant="outlined">
       <Toolbar>
         <HackSocIcon className={classes.icon} color="inherit" />
         <Typography variant="h6" color="inherit" noWrap>

@@ -1,6 +1,23 @@
 import React from 'react';
+import { Container, Typography } from '@material-ui/core';
 import Heading from '../../components/Heading';
+import ServiceCard from '../../components/ServiceCard';
+import { DiscordReturnUrl } from '../../config';
+import useStyles from './HomePage.styles';
 
-const HomePage: React.FC = () => <Heading />;
+const HomePage: React.FC = () => {
+  const classes = useStyles();
+
+  return (
+    <>
+      <Heading />
+      <div className={classes.container}>
+        <Container maxWidth="md">
+          <ServiceCard platform="Discord" buttonUrl={DiscordReturnUrl} />
+        </Container>
+      </div>
+    </>
+  );
+};
 
 export default HomePage;

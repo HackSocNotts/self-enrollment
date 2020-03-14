@@ -17,14 +17,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "lint": "npm run lint:js && npm run lint:style",
-    "lint:fix": "npm run lint:js:fix && npm run lint:style:fix",
+    "lint": "npm run lint:js",
+    "lint:fix": "npm run lint:js:fix",
+    "lint:staged": "npm run lint:js:staged",
     "lint:js": "eslint . --ignore-path .gitignore --ext .js,.ts,.jsx,.tsx",
     "lint:js:staged": "eslint --ignore-path .gitignore",
     "lint:js:fix": "npm run lint:js -- --fix",
-    "lint:style": "stylelint --ignore-path .gitignore \"src/**.*scss\" \"src/**.*css\"",
-    "lint:style:staged": "stylelint --ignore-path .gitignore",
-    "lint:style:fix": "npm run lint:style -- --fix",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -65,18 +63,11 @@
     "husky": "^3.0.1",
     "jest-junit": "^7.0.0",
     "lint-staged": "^9.2.1",
-    "prettier": "^1.18.2",
-    "stylelint": "^10.1.0",
-    "stylelint-config-prettier": "^5.2.0",
-    "stylelint-config-recommended": "^2.2.0",
-    "stylelint-junit-formatter": "^0.2.1"
+    "prettier": "^1.18.2"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
       "npm run lint:js:staged"
-    ],
-    "*.{css,less}": [
-      "npm run lint:style:staged"
     ]
   },
   "husky": {

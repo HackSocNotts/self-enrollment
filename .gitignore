@@ -15,3 +15,5 @@ node_modules/
 # Test Artifacts
 junit.xml
 coverage/
+
+.env

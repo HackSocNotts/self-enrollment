@@ -5,27 +5,36 @@
 
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import express, { Request, Response } from 'express';
+import express, { Request, Response, RequestHandler } from 'express';
 import path from 'path';
-import routes from './routes';
 import { errors } from 'celebrate';
+import { Server } from '@overnightjs/core';
+import DiscordController from './controllers/discord';
+import { Logger } from '@overnightjs/logger';
 
-/**
- * HackSoc Core API Express App
- */
-const app = express();
+class SelfEnrollmentServer extends Server {
+  public constructor() {
+    super(process.env.NODE_ENV === 'development');
+    this.app.use(bodyParser.json());
+    this.app.use(cors());
+    this.setupControllers();
+  }
 
-app.use(bodyParser.json());
-app.use(cors());
+  private setupControllers() {
+    const discordController = new DiscordController();
 
-app.use(express.static(path.join(__dirname, '../../frontend/build')));
+    super.addControllers([discordController], undefined, (errors() as unknown) as RequestHandler);
+  }
 
-app.use('/api', routes);
+  public start(port: number) {
+    this.app.use(express.static(path.join(__dirname, '../../frontend/build')));
+    this.app.get('/*', (_req: Request, res: Response) => {
+      res.sendFile(path.join(__dirname, '../../frontend/build/index.html'));
+    });
+    this.app.listen(port, () => {
+      Logger.Imp('Server listening on port: ' + port);
+    });
+  }
+}
 
-app.get('*', (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, '../../frontend/build/index.html'));
-});
-
-app.use(errors());
-
-export default app;
+export default SelfEnrollmentServer;

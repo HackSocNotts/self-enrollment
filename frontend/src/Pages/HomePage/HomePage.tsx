@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
 import Heading from '../../components/Heading';
 import ServiceCard from '../../components/ServiceCard';
 import { DiscordReturnUrl } from '../../config';

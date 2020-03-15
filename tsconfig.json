@@ -8,6 +8,7 @@
     "strict": true,
     "target": "es2017",
     "esModuleInterop": true,
+    "experimentalDecorators": true
   },
   "compileOnSave": true,
   "include": [

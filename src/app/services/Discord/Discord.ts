@@ -8,6 +8,7 @@ import qs from 'querystring';
 import { DISCORD_CLIENT_ID, DISCORD_BOT_TOKEN, DISCORD_CLIENT_SECRET, BASE_URL } from '../../../config';
 import { AccessTokenResponse, User } from './models';
 import { InvalidCodeError, NoAccessTokenError, ExpiredAccessTokenError } from './errors';
+import { Logger } from '@overnightjs/logger';
 
 class DiscordService {
   private instance: AxiosInstance;
@@ -15,7 +16,8 @@ class DiscordService {
   private clientSecret: string;
   private botToken: string;
   private scopes: string[];
-  private accessToken?: string;
+  public accessToken?: string;
+  public accessTokenExpiry?: number;
 
   public constructor() {
     this.clientId = DISCORD_CLIENT_ID;
@@ -29,13 +31,21 @@ class DiscordService {
   }
 
   private serializeScopes() {
-    return this.scopes.reduce((acc, val) => acc + val + ' ', '');
+    return this.scopes.reduce((acc, val) => acc + val + ' ', '').trim();
   }
 
   public generateRedirectURI() {
-    return `${this.instance.defaults.baseURL}/oauth2/authorize?client_id=${
-      this.clientId
-    }&redirect_uri=${BASE_URL}/api/discord/return&type=code&scope=${this.serializeScopes()}`;
+    return (
+      `${this.instance.defaults.baseURL}/oauth2/authorize?` +
+      qs.stringify({
+        /* eslint-disable @typescript-eslint/camelcase */
+        client_id: this.clientId,
+        redirect_uri: `${BASE_URL}/api/discord/return`,
+        type: 'code',
+        scope: this.serializeScopes(),
+        /* eslint-enable @typescript-eslint/camelcase */
+      })
+    );
   }
 
   public async getAccessToken(code: string) {
@@ -45,7 +55,7 @@ class DiscordService {
       client_secret: this.clientSecret,
       grant_type: 'authorization_code',
       code,
-      redirect_uri: this.generateRedirectURI(),
+      redirect_uri: `${BASE_URL}/api/discord/return`,
       scope: this.serializeScopes(),
       /* eslint-enable @typescript-eslint/camelcase */
     };
@@ -64,9 +74,9 @@ class DiscordService {
       );
 
       this.accessToken = response.data.access_token;
-
-      console.log('access token: ', this.accessToken);
+      this.accessTokenExpiry = response.data.expires_in;
     } catch (e) {
+      Logger.Err(e.response.data, true);
       if (e.response.status === 400) {
         throw new InvalidCodeError();
       } else {

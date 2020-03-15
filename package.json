@@ -6,9 +6,10 @@
     "lint:fix": "npm run lint -- --fix",
     "pretest": "npm run lint",
     "build": "tsc",
-    "start": "tsc-watch --onSuccess 'node lib/index.js'",
+    "start": "npn run setEnv; tsc-watch --onSuccess 'node lib/index.js'",
     "test": "jest --watchAll=false --verbose=false",
-    "test:watch": "jest --watchAll --verbose=false"
+    "test:watch": "jest --watchAll --verbose=false",
+    "setEnv": "export $(grep -- -v '^#' ./.env | xargs -- -d '\n')"
   },
   "engines": {
     "node": "12"
@@ -19,11 +20,13 @@
     "@types/bunyan": "^1.8.6",
     "@types/node": "^12.6.8",
     "@types/sinon": "^7.0.13",
+    "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "celebrate": "^10.0.1",
     "cors": "^2.8.5",
     "deep-object-diff": "^1.1.0",
     "express": "^4.17.1",
+    "querystring": "^0.2.0",
     "sinon": "^7.3.2"
   },
   "devDependencies": {

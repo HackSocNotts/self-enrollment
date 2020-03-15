@@ -4,6 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Request, Response, RequestHandler } from 'express';
 import path from 'path';
@@ -16,6 +17,7 @@ class SelfEnrollmentServer extends Server {
   public constructor() {
     super(process.env.NODE_ENV === 'development');
     this.app.use(bodyParser.json());
+    this.app.use(cookieParser());
     this.app.use(cors());
     this.setupControllers();
   }

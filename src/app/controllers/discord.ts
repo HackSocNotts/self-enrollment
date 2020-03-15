@@ -3,12 +3,12 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { OK, BAD_REQUEST } from 'http-status-codes';
+import { OK, BAD_REQUEST, UNAUTHORIZED, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import { Get, Controller } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from '@overnightjs/logger';
 import DiscordService from '../services/Discord/Discord';
-import { InvalidCodeError } from '../services/Discord/errors';
+import { InvalidCodeError, ExpiredAccessTokenError, NoAccessTokenError } from '../services/Discord/errors';
 
 @Controller('api/discord')
 class DiscordController {
@@ -33,7 +33,7 @@ class DiscordController {
           secure: true,
           sameSite: true,
           httpOnly: true,
-          expires: new Date(Date.now() + (this.discordService.accessTokenExpiry || 30 * 60)),
+          expires: new Date(Date.now() + (this.discordService.accessTokenExpiry || 30 * 60 * 1000)),
         })
         .redirect('/');
     } catch (e) {
@@ -52,6 +52,36 @@ class DiscordController {
     res.status(OK).json({
       redirectURI: this.discordService.generateRedirectURI(),
     });
+  }
+
+  @Get('profile')
+  public async getProfile(req: Request, res: Response) {
+    if (!req.cookies.discord) {
+      Logger.Info('No Discord Access Token in Cookies');
+      res.status(BAD_REQUEST).send('Missing Discord Access Token');
+    }
+
+    this.discordService.accessToken = req.cookies.discord;
+
+    try {
+      const profile = await this.discordService.getProfile();
+
+      return res.status(OK).json(profile);
+    } catch (e) {
+      if (e instanceof ExpiredAccessTokenError) {
+        Logger.Info('Discord Access Token has Expired');
+        return res
+          .clearCookie('discord')
+          .status(UNAUTHORIZED)
+          .send('Discord Access Token Expired');
+      } else if (e instanceof NoAccessTokenError) {
+        Logger.Info('No Discord Access Token Provided');
+        return res.status(BAD_REQUEST).send('Missing Discord Access Token');
+      } else {
+        Logger.Err(e, true);
+        return res.status(INTERNAL_SERVER_ERROR).send('Unknown Error Occurred');
+      }
+    }
   }
 }
 

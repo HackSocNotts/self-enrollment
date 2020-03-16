@@ -23,7 +23,7 @@ class DiscordService {
     this.clientId = DISCORD_CLIENT_ID;
     this.clientSecret = DISCORD_CLIENT_SECRET;
     this.botToken = DISCORD_BOT_TOKEN;
-    this.scopes = ['identity', 'guilds.join'];
+    this.scopes = ['identify', 'guilds.join'];
     this.instance = axios.create({
       baseURL: 'https://discordapp.com/api',
       timeout: 1000,
@@ -41,7 +41,7 @@ class DiscordService {
         /* eslint-disable @typescript-eslint/camelcase */
         client_id: this.clientId,
         redirect_uri: `${BASE_URL}/api/discord/return`,
-        type: 'code',
+        response_type: 'code',
         scope: this.serializeScopes(),
         /* eslint-enable @typescript-eslint/camelcase */
       })

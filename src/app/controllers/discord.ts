@@ -32,7 +32,6 @@ class DiscordController {
         .cookie('discord', this.discordService.accessToken, {
           secure: true,
           sameSite: true,
-          httpOnly: true,
           expires: new Date(Date.now() + (this.discordService.accessTokenExpiry || 30 * 60 * 1000)),
         })
         .redirect('/');

@@ -22,45 +22,66 @@ class DiscordController {
   public async getOAuthReturn(req: Request, res: Response) {
     if (!req.query.code) {
       Logger.Info('No code provided to discord oauth return');
-      return res.status(BAD_REQUEST).send('discord access token is missing.');
+      return res
+        .status(BAD_REQUEST)
+        .send('discord access token is missing.')
+        .end();
     }
 
     try {
       await this.discordService.getAccessToken(req.query.code);
-      return res
-        .status(OK)
-        .cookie('discord', this.discordService.accessToken, {
-          secure: true,
-          sameSite: true,
-          expires: new Date(Date.now() + (this.discordService.accessTokenExpiry || 30 * 60 * 1000)),
-        })
-        .redirect('/');
+      if (req.session) {
+        req.session.discord = this.discordService.accessToken;
+        await new Promise((resolve, reject) => {
+          (req.session as Express.Session).save(err => {
+            if (err) {
+              return reject(err);
+            }
+            return resolve(err);
+          });
+        });
+        return res.status(OK).redirect('/');
+      } else {
+        throw new Error('Failed to access session');
+      }
     } catch (e) {
       if (e instanceof InvalidCodeError) {
         Logger.Warn('Provided with bad Discord Access token');
-        res.status(BAD_REQUEST).send('Invalid OAuth Token.');
+        return res
+          .status(BAD_REQUEST)
+          .send('Invalid OAuth Token.')
+          .end();
       } else {
         Logger.Err(e, true);
-        res.status(500).send('Unknown Error Occurred');
+        return res
+          .status(500)
+          .send('Unknown Error Occurred')
+          .end();
       }
     }
   }
 
   @Get('redirectURI')
   public getRedirectURI(_req: Request, res: Response) {
-    res.status(OK).json({
-      redirectURI: this.discordService.generateRedirectURI(),
-    });
+    res
+      .status(OK)
+      .json({
+        redirectURI: this.discordService.generateRedirectURI(),
+      })
+      .end();
   }
 
   @Get('profile')
   public async getProfile(req: Request, res: Response) {
-    if (!req.cookies.discord) {
-      Logger.Info('No Discord Access Token in Cookies');
-      res.status(BAD_REQUEST).send('Missing Discord Access Token');
+    if (!req.session || !req.session.discord) {
+      Logger.Info('No Discord Access Token in Session');
+      return res
+        .status(BAD_REQUEST)
+        .send('Missing Discord Access Token')
+        .end();
     }
 
-    this.discordService.accessToken = req.cookies.discord;
+    this.discordService.accessToken = req.session.discord;
 
     try {
       const profile = await this.discordService.getProfile();
@@ -69,16 +90,23 @@ class DiscordController {
     } catch (e) {
       if (e instanceof ExpiredAccessTokenError) {
         Logger.Info('Discord Access Token has Expired');
+        req.session.discord = undefined;
         return res
-          .clearCookie('discord')
           .status(UNAUTHORIZED)
-          .send('Discord Access Token Expired');
+          .send('Discord Access Token Expired')
+          .end();
       } else if (e instanceof NoAccessTokenError) {
         Logger.Info('No Discord Access Token Provided');
-        return res.status(BAD_REQUEST).send('Missing Discord Access Token');
+        return res
+          .status(BAD_REQUEST)
+          .send('Missing Discord Access Token')
+          .end();
       } else {
         Logger.Err(e, true);
-        return res.status(INTERNAL_SERVER_ERROR).send('Unknown Error Occurred');
+        return res
+          .status(INTERNAL_SERVER_ERROR)
+          .send('Unknown Error Occurred')
+          .end();
       }
     }
   }

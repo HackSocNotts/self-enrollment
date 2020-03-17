@@ -5,14 +5,12 @@
 
 import Knex from 'knex';
 import knexConfig from '../../../database/knexfile';
-import { Logger } from '@overnightjs/logger';
 
 class Database {
   private static _instance: Database;
   private readonly db: Knex;
 
   private constructor() {
-    Logger.Info(knexConfig, true);
     this.db = Knex(knexConfig);
   }
 

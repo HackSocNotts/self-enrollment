@@ -21,10 +21,10 @@ import { SESSION_SECRET } from '../config';
 class SelfEnrollmentServer extends Server {
   public constructor() {
     super(process.env.NODE_ENV === 'development');
+    this.app.use(express.static(path.join(__dirname, '../../frontend/build')));
     this.app.use(bodyParser.json());
     this.app.use(cookieParser());
     this.app.use(cors());
-    this.setupControllers();
 
     const KnexSessionStore = connectSessionKnex(session);
     const DB = Database.getInstance();
@@ -43,6 +43,9 @@ class SelfEnrollmentServer extends Server {
         store: store,
       }),
     );
+
+    // Should always be last call in constructor
+    this.setupControllers();
   }
 
   private setupControllers() {
@@ -52,7 +55,6 @@ class SelfEnrollmentServer extends Server {
   }
 
   public start(port: number) {
-    this.app.use(express.static(path.join(__dirname, '../../frontend/build')));
     this.app.get('/*', (_req: Request, res: Response) => {
       res.sendFile(path.join(__dirname, '../../frontend/build/index.html'));
     });

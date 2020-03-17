@@ -10,6 +10,7 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error', { singleQuote: true }],
     '@typescript-eslint/explicit-function-return-type': 0,
+    'jsdoc/require-param-type': 0,
   },
   overrides: [
     {
@@ -18,6 +19,13 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 0,
         '@typescript-eslint/explicit-function-return-type': 0,
         '@typescript-eslint/no-angle-bracket-type-assertion': 0,
+      },
+    },
+    {
+      files: ['src/database/migrations/**'],
+      rules: {
+        'jsdoc/require-returns': 0,
+        'jsdoc/require-param-description': 0,
       },
     },
   ],

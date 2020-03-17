@@ -12,6 +12,11 @@ import { errors } from 'celebrate';
 import { Server } from '@overnightjs/core';
 import DiscordController from './controllers/discord';
 import { Logger } from '@overnightjs/logger';
+import session from 'express-session';
+// @ts-ignore
+import connectSessionKnex from 'connect-session-knex';
+import Database from './services/Database';
+import { SESSION_SECRET } from '../config';
 
 class SelfEnrollmentServer extends Server {
   public constructor() {
@@ -20,6 +25,24 @@ class SelfEnrollmentServer extends Server {
     this.app.use(cookieParser());
     this.app.use(cors());
     this.setupControllers();
+
+    const KnexSessionStore = connectSessionKnex(session);
+    const DB = Database.getInstance();
+
+    const store = new KnexSessionStore({
+      knex: DB.getKnex(),
+      tableName: 'sessions',
+    });
+
+    this.app.use(
+      session({
+        secret: SESSION_SECRET as string,
+        cookie: {
+          maxAge: 60 * 60 * 1000,
+        },
+        store: store,
+      }),
+    );
   }
 
   private setupControllers() {

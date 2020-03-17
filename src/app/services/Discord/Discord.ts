@@ -3,12 +3,12 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import qs from 'querystring';
-import { DISCORD_CLIENT_ID, DISCORD_BOT_TOKEN, DISCORD_CLIENT_SECRET, BASE_URL } from '../../../config';
 import { AccessTokenResponse, User } from './models';
-import { InvalidCodeError, NoAccessTokenError, ExpiredAccessTokenError } from './errors';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { BASE_URL, DISCORD_BOT_TOKEN, DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET } from '../../../config';
+import { ExpiredAccessTokenError, InvalidCodeError, NoAccessTokenError } from './errors';
 import { Logger } from '@overnightjs/logger';
+import qs from 'querystring';
 
 class DiscordService {
   private instance: AxiosInstance;

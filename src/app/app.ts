@@ -3,19 +3,19 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import express, { Request, RequestHandler, Response } from 'express';
 import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
-import express, { Request, Response, RequestHandler } from 'express';
-import path from 'path';
-import { errors } from 'celebrate';
-import { Server } from '@overnightjs/core';
-import DiscordController from './controllers/discord';
-import { Logger } from '@overnightjs/logger';
-import session from 'express-session';
 // @ts-ignore
 import connectSessionKnex from 'connect-session-knex';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import Database from './services/Database';
+import DiscordController from './controllers/discord';
+import { errors } from 'celebrate';
+import { Logger } from '@overnightjs/logger';
+import path from 'path';
+import { Server } from '@overnightjs/core';
+import session from 'express-session';
 import { SESSION_SECRET } from '../config';
 
 class SelfEnrollmentServer extends Server {

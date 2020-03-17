@@ -11,6 +11,7 @@ module.exports = {
     'prettier/prettier': ['error', { singleQuote: true }],
     '@typescript-eslint/explicit-function-return-type': 0,
     'jsdoc/require-param-type': 0,
+    'sort-imports': ['error', { ignoreCase: true }],
   },
   overrides: [
     {

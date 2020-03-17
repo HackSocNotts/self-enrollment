@@ -3,8 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import request from 'supertest';
 import app from './app';
+import request from 'supertest';
 
 describe('root', () => {
   it('should 200 with no path', async () => {

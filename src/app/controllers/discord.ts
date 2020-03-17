@@ -3,12 +3,12 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { OK, BAD_REQUEST, UNAUTHORIZED, INTERNAL_SERVER_ERROR } from 'http-status-codes';
-import { Get, Controller } from '@overnightjs/core';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED } from 'http-status-codes';
+import { Controller, Get } from '@overnightjs/core';
+import { ExpiredAccessTokenError, InvalidCodeError, NoAccessTokenError } from '../services/Discord/errors';
 import { Request, Response } from 'express';
-import { Logger } from '@overnightjs/logger';
 import DiscordService from '../services/Discord/Discord';
-import { InvalidCodeError, ExpiredAccessTokenError, NoAccessTokenError } from '../services/Discord/errors';
+import { Logger } from '@overnightjs/logger';
 
 @Controller('api/discord')
 class DiscordController {

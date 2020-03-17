@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { CookiesProvider } from 'react-cookie';
 import Router from './Router';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import HeaderBar from '../components/HeaderBar';
@@ -16,9 +17,11 @@ const App: React.FC<AppProps> = ({ version }) => {
   return (
     <>
       <CssBaseline />
-      <Router>
-        <HeaderBar />
-      </Router>
+      <CookiesProvider>
+        <Router>
+          <HeaderBar />
+        </Router>
+      </CookiesProvider>
       <Footer />
     </>
   );

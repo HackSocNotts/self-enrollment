@@ -6,26 +6,37 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import useStyles from './ServiceCard.styles';
+import { LinearProgress, CardHeader } from '@material-ui/core';
+import Profile, { ProfileProps } from '../Profile';
 
 export interface ServiceCardProps {
   platform: 'Discord' | 'GitHub';
-  buttonUrl: string;
+  loginURL?: string;
+  loading: boolean;
+  profile?: ProfileProps;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ platform, buttonUrl }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ platform, loginURL, loading, profile }) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root} variant="outlined">
+      {loading && <LinearProgress />}
+      <CardHeader title={platform} />
+      {profile && <Profile {...profile} />}
       <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-          {platform}
-        </Typography>
+        {!profile && <Typography>Login with {platform} below to enroll.</Typography>}
+        {profile && (
+          <Typography>If the user above is correct, click enroll below to assign the following roles:</Typography>
+        )}
       </CardContent>
       <CardActions>
-        <Button size="small" component={Link} href={buttonUrl}>
-          Login to {platform}
-        </Button>
+        {loginURL && !profile && (
+          <Button size="small" component={Link} href={loginURL}>
+            Login to {platform}
+          </Button>
+        )}
+        {profile && <Button size="small">Enroll</Button>}
       </CardActions>
     </Card>
   );

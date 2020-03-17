@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ServiceCard from './ServiceCard';
+import Profile from './Profile';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<ServiceCard platform="Discord" loginURL="#" />, div);
+  ReactDOM.render(<Profile />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

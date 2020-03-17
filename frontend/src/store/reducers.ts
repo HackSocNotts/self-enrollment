@@ -1,5 +1,6 @@
 import { AppState } from './AppState';
 import { AuthReducer } from './auth';
+import { DiscordReducer } from './discord';
 import { Reducer } from 'react';
 
 type Reducers<TAppState> = {
@@ -9,6 +10,7 @@ type Reducers<TAppState> = {
 
 const RootReducer: Reducers<AppState> = {
   auth: AuthReducer,
+  discord: DiscordReducer,
 };
 
 export default RootReducer;

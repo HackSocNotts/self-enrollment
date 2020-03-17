@@ -1,9 +1,8 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 import Heading from '../../components/Heading';
-import ServiceCard from '../../components/ServiceCard';
-import { DiscordReturnUrl } from '../../config';
 import useStyles from './HomePage.styles';
+import DiscordServiceCard from '../../components/DiscordServiceCard';
 
 const HomePage: React.FC = () => {
   const classes = useStyles();
@@ -13,7 +12,7 @@ const HomePage: React.FC = () => {
       <Heading />
       <div className={classes.container}>
         <Container maxWidth="md">
-          <ServiceCard platform="Discord" buttonUrl={DiscordReturnUrl} />
+          <DiscordServiceCard />
         </Container>
       </div>
     </>

@@ -13,3 +13,11 @@ export const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN as string;
 
 // Session Configuration
 export const SESSION_SECRET = process.env.SESSION_SECRET;
+
+// AzureAD ODIC
+export const AAD_IDENTITY_METADATA = process.env.AAD_IDENTITY_METADATA;
+export const AAD_CLIENT_ID = process.env.AAD_CLIENT_ID;
+export const AAD_CLIENT_SECRET = process.env.AAD_CLIENT_SECRET;
+export const AAD_TENNANT_ID = process.env.AAD_TENNANT_ID;
+export const AAD_ISSUER = process.env.AAD_ISSUER;
+export const AAD_APPIDURI = process.env.AAD_APPIDURI;

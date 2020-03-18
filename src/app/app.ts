@@ -3,7 +3,10 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+// import './middleware/passport';
+import './middleware/passport';
 import express, { Request, RequestHandler, Response } from 'express';
+import AuthController from './controllers/auth';
 import bodyParser from 'body-parser';
 // @ts-ignore
 import connectSessionKnex from 'connect-session-knex';
@@ -13,6 +16,7 @@ import Database from './services/Database';
 import DiscordController from './controllers/discord';
 import { errors } from 'celebrate';
 import { Logger } from '@overnightjs/logger';
+import passport from 'passport';
 import path from 'path';
 import { Server } from '@overnightjs/core';
 import session from 'express-session';
@@ -23,6 +27,7 @@ class SelfEnrollmentServer extends Server {
     super(process.env.NODE_ENV === 'development');
     this.app.use(express.static(path.join(__dirname, '../../frontend/build')));
     this.app.use(bodyParser.json());
+    this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(cookieParser());
     this.app.use(cors());
 
@@ -41,8 +46,12 @@ class SelfEnrollmentServer extends Server {
           maxAge: 60 * 60 * 1000,
         },
         store: store,
+        resave: false,
+        saveUninitialized: false,
       }),
     );
+    this.app.use(passport.initialize());
+    this.app.use(passport.session());
 
     // Should always be last call in constructor
     this.setupControllers();
@@ -50,8 +59,9 @@ class SelfEnrollmentServer extends Server {
 
   private setupControllers() {
     const discordController = new DiscordController();
+    const authController = new AuthController();
 
-    super.addControllers([discordController], undefined, (errors() as unknown) as RequestHandler);
+    super.addControllers([authController, discordController], undefined, (errors() as unknown) as RequestHandler);
   }
 
   public start(port: number) {

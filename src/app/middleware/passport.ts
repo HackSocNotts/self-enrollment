@@ -6,10 +6,9 @@
 import { AAD_CLIENT_ID, AAD_CLIENT_SECRET, AAD_IDENTITY_METADATA, BASE_URL } from '../../config';
 import AzureAD from '../services/AzureAD';
 import Database from '../services/Database';
-// import { Logger } from '@overnightjs/logger';
+import { Logger } from '@overnightjs/logger';
 import { OIDCStrategy } from 'passport-azure-ad';
 import passport from 'passport';
-import { Logger } from '@overnightjs/logger';
 
 passport.use(
   new OIDCStrategy(
@@ -35,9 +34,17 @@ passport.use(
       const profile = await azureAD.getUserDetails();
 
       try {
-        await db.addUserIfNotExists({ id: profile.id, email: profile.mail, displayName: profile.displayName });
+        await db.addUserIfNotExists({
+          id: profile.id,
+          username: profile.userPrincipalName,
+          displayName: profile.displayName,
+        });
         Logger.Info(profile, true);
-        return done(null, profile);
+        return done(null, {
+          id: profile.id,
+          username: profile.userPrincipalName,
+          displayName: profile.displayName,
+        });
       } catch (err) {
         return done(err);
       }

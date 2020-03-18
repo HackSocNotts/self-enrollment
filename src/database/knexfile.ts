@@ -13,6 +13,7 @@ export const connection = {
   database: process.env.DB_DATABASE,
   options: {
     port: process.env.DB_PORT,
+    enableArithAbort: true,
   },
 };
 export const pool = {

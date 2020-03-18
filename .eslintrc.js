@@ -27,6 +27,7 @@ module.exports = {
       rules: {
         'jsdoc/require-returns': 0,
         'jsdoc/require-param-description': 0,
+        '@typescript-eslint/no-explicit-any': 0,
       },
     },
   ],

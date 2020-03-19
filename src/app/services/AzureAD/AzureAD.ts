@@ -41,6 +41,16 @@ class AzureAD {
       throw error;
     }
   }
+
+  public async getGroups() {
+    try {
+      const result = await this.client.api('/me/memberOf').get();
+      const groups = result.value;
+      return groups.map((group: { id: string }) => group.id) as string[];
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default AzureAD;

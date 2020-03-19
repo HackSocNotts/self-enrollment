@@ -6,7 +6,7 @@
 import { AAD_CLIENT_ID, AAD_CLIENT_SECRET, AAD_IDENTITY_METADATA, BASE_URL } from '../../config';
 import AzureAD from '../services/AzureAD';
 import Database from '../services/Database';
-import { Logger } from '@overnightjs/logger';
+// import { Logger } from '@overnightjs/logger';
 import { OIDCStrategy } from 'passport-azure-ad';
 import passport from 'passport';
 
@@ -31,15 +31,18 @@ passport.use(
       const azureAD = new AzureAD(params.access_token);
       const db = Database.getInstance();
 
-      const profile = await azureAD.getUserDetails();
-
       try {
+        const profile = await azureAD.getUserDetails();
+        const groups = await azureAD.getGroups();
+
+        req.session.groups = groups;
+
         await db.addUserIfNotExists({
           id: profile.id,
           username: profile.userPrincipalName,
           displayName: profile.displayName,
         });
-        Logger.Info(profile, true);
+        req.session.jobTitle = profile.jobTitle;
         return done(null, {
           id: profile.id,
           username: profile.userPrincipalName,

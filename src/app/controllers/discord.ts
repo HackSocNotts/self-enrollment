@@ -7,6 +7,7 @@ import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED } from 'http-statu
 import { Controller, Get } from '@overnightjs/core';
 import { ExpiredAccessTokenError, InvalidCodeError, NoAccessTokenError } from '../services/Discord/errors';
 import { Request, Response } from 'express';
+import Database from '../services/Database';
 import DiscordService from '../services/Discord/Discord';
 import { Logger } from '@overnightjs/logger';
 
@@ -108,6 +109,43 @@ class DiscordController {
           .send('Unknown Error Occurred')
           .end();
       }
+    }
+  }
+
+  @Get('roles')
+  public async getRoles(req: Request, res: Response) {
+    const db = Database.getInstance();
+
+    if (!req.session) {
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send('Session failed to initialize.')
+        .end();
+    }
+
+    if (!req.session.groups && !req.session.jobTitle) {
+      return res
+        .status(BAD_REQUEST)
+        .send('Missing Azure AD keys')
+        .end();
+    }
+
+    try {
+      const positionGroup = await db.getPositionGroup(req.session.jobTitle);
+      const groups = await db.findGroups(req.session.groups);
+
+      const roles = [...positionGroup.map(posGroup => posGroup.name), ...groups.map(group => group.discordRoleName)];
+
+      return res
+        .status(OK)
+        .json({ roles })
+        .end();
+    } catch (e) {
+      Logger.Err(e, true);
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send('Unknown Error Occurred')
+        .end();
     }
   }
 }

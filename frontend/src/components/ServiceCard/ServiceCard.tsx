@@ -14,9 +14,10 @@ export interface ServiceCardProps {
   loginURL?: string;
   loading: boolean;
   profile?: ProfileProps;
+  message?: React.ReactNode;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ platform, loginURL, loading, profile }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ platform, loginURL, loading, profile, message }) => {
   const classes = useStyles();
 
   return (
@@ -26,9 +27,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ platform, loginURL, loading, 
       {profile && <Profile {...profile} />}
       <CardContent>
         {!profile && <Typography>Login with {platform} below to enroll.</Typography>}
-        {profile && (
-          <Typography>If the user above is correct, click enroll below to assign the following roles:</Typography>
-        )}
+        {profile && message && <>{message}</>}
       </CardContent>
       <CardActions>
         {loginURL && !profile && (

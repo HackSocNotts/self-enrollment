@@ -5,6 +5,7 @@ import { Thunks } from '../../store/discord/actions';
 import ServiceCard from '../../components/ServiceCard';
 import { ProfileProps } from '../Profile';
 import { Optional } from '../../utils/types';
+import Message from './DiscordServiceCardMessage';
 
 const DiscordServiceCard: React.FC = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,15 @@ const DiscordServiceCard: React.FC = () => {
     dispatch(Thunks.getRedirectURI());
   }
 
-  return <ServiceCard platform="Discord" loginURL={redirectURI} loading={loading} profile={cardProfile} />;
+  return (
+    <ServiceCard
+      platform="Discord"
+      loginURL={redirectURI}
+      loading={loading}
+      profile={cardProfile}
+      message={<Message />}
+    />
+  );
 };
 
 export default DiscordServiceCard;

@@ -10,3 +10,16 @@ jest.config.js
 README.md
 Dockerfile
 .dockerignore
+
+frontend/.vscode/
+frontend/lib/
+frontend/node_modules/
+frontend/.codeclimate
+frontend/.editorconfig
+frontend/.eslintignore
+frontend/.slintrc.js
+frontend/.prettierrc.js
+frontend/jest.config.js
+frontend/README.md
+frontend/Dockerfile
+frontend/.dockerignore

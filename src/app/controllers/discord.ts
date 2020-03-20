@@ -4,14 +4,16 @@
 // https://opensource.org/licenses/MIT
 
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED } from 'http-status-codes';
-import { Controller, Get } from '@overnightjs/core';
+import { ClassMiddleware, Controller, Get } from '@overnightjs/core';
 import { ExpiredAccessTokenError, InvalidCodeError, NoAccessTokenError } from '../services/Discord/errors';
 import { Request, Response } from 'express';
 import Database from '../services/Database';
 import DiscordService from '../services/Discord/Discord';
+import isAuthenticated from '../middleware/isAuthenticated';
 import { Logger } from '@overnightjs/logger';
 
 @Controller('api/discord')
+@ClassMiddleware(isAuthenticated)
 class DiscordController {
   private readonly discordService: DiscordService;
 

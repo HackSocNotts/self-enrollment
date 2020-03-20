@@ -14,6 +14,9 @@ import {
   START_GET_PROFILE,
   GET_PROFILE_SUCCESS,
   GET_PROFILE_FAILED,
+  START_GET_ROLES,
+  GET_ROLES_SUCCESS,
+  GET_ROLES_FAILED,
 } from './actions';
 
 export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
@@ -62,6 +65,31 @@ export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
     }
 
     case GET_PROFILE_FAILED: {
+      const { error } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        error,
+      };
+    }
+
+    case START_GET_ROLES: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case GET_ROLES_SUCCESS: {
+      const { roles } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        roles,
+      };
+    }
+
+    case GET_ROLES_FAILED: {
       const { error } = action.payload;
       return {
         ...state,

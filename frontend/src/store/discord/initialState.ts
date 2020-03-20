@@ -11,4 +11,5 @@ export default {
   loading: false,
   error: undefined as Optional<string>,
   profile: undefined as Optional<DiscordProfile | false>,
+  roles: undefined as Optional<string[]>,
 };

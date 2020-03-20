@@ -17,3 +17,7 @@ export interface DiscordProfile {
   flags?: number;
   premium_type?: number;
 }
+
+export interface DiscordRoles {
+  roles: string[];
+}

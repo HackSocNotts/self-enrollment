@@ -17,6 +17,10 @@ export const GET_PROFILE = '[Discord] GET_PROFILE';
 export const START_GET_PROFILE = '[Discord] START_GET_PROFILE';
 export const GET_PROFILE_SUCCESS = '[Discord] GET_PROFILE_SUCCESS';
 export const GET_PROFILE_FAILED = '[Discord] GET_PROFILE_FAILED';
+export const GET_ROLES = '[Discord] GET_ROLE';
+export const START_GET_ROLES = '[Discord] START_GET_ROLE';
+export const GET_ROLES_SUCCESS = '[Discord] GET_ROLE_SUCCESS';
+export const GET_ROLES_FAILED = '[Discord] GET_ROLE_FAILED';
 
 export const Actions = {
   getRedirectURI: () => createAction(GET_REDIRECT_URI),
@@ -26,7 +30,11 @@ export const Actions = {
   getProfile: () => createAction(GET_PROFILE),
   startGetProfile: () => createAction(START_GET_PROFILE),
   getProfileSuccess: (profile: DiscordProfile | false) => createAction(GET_PROFILE_SUCCESS, { profile }),
-  getProfileError: (error: string) => createAction(GET_PROFILE_FAILED, { error }),
+  getProfileFailed: (error: string) => createAction(GET_PROFILE_FAILED, { error }),
+  getRoles: () => createAction(GET_ROLES),
+  startGetRoles: () => createAction(START_GET_ROLES),
+  getRolesSuccess: (roles: string[]) => createAction(GET_ROLES_SUCCESS, { roles }),
+  getRolesFailed: (error: string) => createAction(GET_ROLES_FAILED, { error }),
 };
 
 export const Thunks = {
@@ -54,8 +62,20 @@ export const Thunks = {
         if ((err as FetchDiscordProfileError).profileExists === false) {
           dispatch(Actions.getProfileSuccess(false));
         } else {
-          dispatch(Actions.getRedirectURIFailed(err.getMessage()));
+          dispatch(Actions.getProfileFailed(err.getMessage()));
         }
+      }
+    }),
+  getRoles: () =>
+    createThunkAction(async dispatch => {
+      const apiService = APIService.getInstance();
+      dispatch(Actions.getRoles());
+      try {
+        dispatch(Actions.startGetRoles());
+        const roles = await apiService.getRoles();
+        dispatch(Actions.getRolesSuccess(roles));
+      } catch (err) {
+        dispatch(Actions.getRolesFailed(err.getMessage()));
       }
     }),
 };

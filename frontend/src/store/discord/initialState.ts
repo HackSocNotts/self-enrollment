@@ -10,5 +10,5 @@ export default {
   redirectURI: undefined as Optional<string>,
   loading: false,
   error: undefined as Optional<string>,
-  profile: undefined as Optional<DiscordProfile>,
+  profile: undefined as Optional<DiscordProfile | false>,
 };

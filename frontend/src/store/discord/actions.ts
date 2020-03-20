@@ -7,6 +7,7 @@ import { ActionsUnion, createAction } from '@martin_hotell/rex-tils';
 import createThunkAction from '../../utils/createThunkAction';
 import APIService from '../../Services/API';
 import { DiscordProfile } from '../../models/DiscordProfile';
+import { FetchDiscordProfileError } from '../../Services/API/errors';
 
 export const GET_REDIRECT_URI = '[Discord] GET_REDIRECT_URI';
 export const START_GET_REDIRECT_URI = '[Discord] START_GET_REDIRECT_URI';
@@ -24,7 +25,7 @@ export const Actions = {
   getRedirectURIFailed: (error: string) => createAction(GET_REDIRECT_URI_FAILED, { error }),
   getProfile: () => createAction(GET_PROFILE),
   startGetProfile: () => createAction(START_GET_PROFILE),
-  getProfileSuccess: (profile: DiscordProfile) => createAction(GET_PROFILE_SUCCESS, { profile }),
+  getProfileSuccess: (profile: DiscordProfile | false) => createAction(GET_PROFILE_SUCCESS, { profile }),
   getProfileError: (error: string) => createAction(GET_PROFILE_FAILED, { error }),
 };
 
@@ -50,7 +51,11 @@ export const Thunks = {
         const profile = await apiService.getDiscordProfile();
         dispatch(Actions.getProfileSuccess(profile));
       } catch (err) {
-        dispatch(Actions.getRedirectURIFailed(err.getMessage()));
+        if ((err as FetchDiscordProfileError).profileExists === false) {
+          dispatch(Actions.getProfileSuccess(false));
+        } else {
+          dispatch(Actions.getRedirectURIFailed(err.getMessage()));
+        }
       }
     }),
 };

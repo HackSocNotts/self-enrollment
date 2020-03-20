@@ -1,5 +1,4 @@
 import React from 'react';
-import { useCookies } from 'react-cookie';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../store/AppState';
 import { Thunks } from '../../store/discord/actions';
@@ -8,7 +7,6 @@ import { ProfileProps } from '../Profile';
 import { Optional } from '../../utils/types';
 
 const DiscordServiceCard: React.FC = () => {
-  const [cookies] = useCookies(['discord']);
   const dispatch = useDispatch();
   const { redirectURI, loading, profile } = useSelector((state: AppState) => state.discord);
 
@@ -19,12 +17,12 @@ const DiscordServiceCard: React.FC = () => {
       }
     : undefined;
 
-  if (!cookies.discord && !redirectURI && !loading) {
-    dispatch(Thunks.getRedirectURI());
+  if (profile === undefined && !loading) {
+    dispatch(Thunks.getProfile());
   }
 
-  if (cookies.discord && !profile && !loading) {
-    dispatch(Thunks.getProfile());
+  if (profile === false && !redirectURI && !loading) {
+    dispatch(Thunks.getRedirectURI());
   }
 
   return <ServiceCard platform="Discord" loginURL={redirectURI} loading={loading} profile={cardProfile} />;

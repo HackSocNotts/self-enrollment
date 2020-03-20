@@ -4,7 +4,8 @@
 // https://opensource.org/licenses/MIT
 
 import axios, { AxiosInstance, AxiosError } from 'axios';
-import { DiscordProfile } from '../models/DiscordProfile';
+import { DiscordProfile } from '../../models/DiscordProfile';
+import { FetchDiscordProfileError } from './errors';
 
 class APIService {
   private static _instance: APIService;
@@ -40,11 +41,11 @@ class APIService {
     } catch (e) {
       const status = (e as AxiosError).response ? e.response.status : 500;
       if (status === 401) {
-        throw new Error('Token has expired, please refresh the page.');
+        throw new FetchDiscordProfileError('Token has expired, please refresh the page.', false);
       } else if (status === 400) {
-        throw new Error('Token is invalid. Please refresh the page.');
+        throw new FetchDiscordProfileError('Token is invalid. Please refresh the page.', false);
       } else {
-        throw new Error('An Unknown Error Occurred. Please try again later.');
+        throw new FetchDiscordProfileError('An Unknown Error Occurred. Please try again later.', true);
       }
     }
   }

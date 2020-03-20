@@ -21,11 +21,12 @@ import path from 'path';
 import { Server } from '@overnightjs/core';
 import session from 'express-session';
 import { SESSION_SECRET } from '../config';
+import shouldAuthenticate from './middleware/shouldAuthenticate';
 
 class SelfEnrollmentServer extends Server {
   public constructor() {
     super(process.env.NODE_ENV === 'development');
-    this.app.use(express.static(path.join(__dirname, '../../frontend/build')));
+    this.app.use(express.static(path.join(__dirname, '../../frontend/build'), { index: false }));
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(cookieParser());
@@ -65,7 +66,7 @@ class SelfEnrollmentServer extends Server {
   }
 
   public start(port: number) {
-    this.app.get('/*', (_req: Request, res: Response) => {
+    this.app.get('/*', shouldAuthenticate, (_req: Request, res: Response) => {
       res.sendFile(path.join(__dirname, '../../frontend/build/index.html'));
     });
     this.app.listen(port, () => {

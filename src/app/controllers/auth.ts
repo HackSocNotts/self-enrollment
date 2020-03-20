@@ -24,8 +24,8 @@ class AuthController {
 
   @Post('return')
   @Middleware(passport.authenticate('azuread-openidconnect', { failureRedirect: '/' }))
-  public authReturn(req: Request, res: Response) {
-    return res.redirect('/auth/whoami');
+  public authReturn(_req: Request, res: Response) {
+    return res.redirect('/');
   }
 
   @Get('logout')

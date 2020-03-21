@@ -17,8 +17,10 @@ RUN yarn build
 FROM node:12-alpine
 WORKDIR /usr/app
 COPY --from=frontend-builder /usr/app/src/build ./frontend/build
-COPY --from=server-builder /usr/app/src/node_modules ./node_modules
+COPY --from=server-builder /usr/app/src/package.json .
+COPY --from=server-builder /usr/app/src/yarn.lock .
 COPY --from=server-builder /usr/app/src/lib ./lib
+RUN yarn install --frozen-lockfile --production=true
 EXPOSE 3000
 ENV PORT 3000
 CMD ["node", "./lib/index.js"]

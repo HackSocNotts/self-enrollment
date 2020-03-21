@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import useStyles from './HeaderBar.styles';
 import HackSocIcon from '../../Icons/HackSocIcon';
 import { NavLink } from 'react-router-dom';
+import { Button } from '@material-ui/core';
 
 const HeaderBar: React.FC = () => {
   const classes = useStyles();
@@ -16,6 +17,9 @@ const HeaderBar: React.FC = () => {
         <Typography variant="h6" color="inherit" component={NavLink} to="/" noWrap className={classes.headerLink}>
           HackSoc Self Enrollment
         </Typography>
+        <Button color="inherit" component="a" href="/auth/logout">
+          Logout
+        </Button>
       </Toolbar>
     </AppBar>
   );

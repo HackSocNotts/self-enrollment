@@ -6,6 +6,7 @@ const useStyles = makeStyles(theme => ({
   },
   headerLink: {
     textDecoration: 'none',
+    flex: 1,
   },
 }));
 

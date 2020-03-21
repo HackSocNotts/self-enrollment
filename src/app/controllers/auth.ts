@@ -31,7 +31,7 @@ class AuthController {
   @Get('logout')
   public logout(req: Request, res: Response) {
     req.logout();
-    return res.redirect('/');
+    return res.redirect('https://hacksocnotts.co.uk');
   }
 
   @Get('whoami')

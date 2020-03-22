@@ -5,7 +5,13 @@
 
 import { AccessTokenResponse, User } from './models';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { BASE_URL, DISCORD_BOT_TOKEN, DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET } from '../../../config';
+import {
+  BASE_URL,
+  DISCORD_BOT_TOKEN,
+  DISCORD_CLIENT_ID,
+  DISCORD_CLIENT_SECRET,
+  DISCORD_GUILD_ID,
+} from '../../../config';
 import { ExpiredAccessTokenError, InvalidCodeError, NoAccessTokenError } from './errors';
 import { Logger } from '@overnightjs/logger';
 import qs from 'querystring';
@@ -101,6 +107,7 @@ class DiscordService {
 
       return response.data;
     } catch (e) {
+      Logger.Err(e, true);
       if (e.response.status === 401 || e.response.status === 403) {
         throw new ExpiredAccessTokenError();
       } else {
@@ -109,9 +116,11 @@ class DiscordService {
     }
   }
 
-  public async enroll(roles: string[], nickname?: string) {
+  public async enroll(roles: number[], nickname?: string) {
     try {
+      Logger.Info('getProfile 1');
       const user = await this.getProfile();
+      Logger.Info('getProfile 2');
 
       const requestData = {
         /* eslint-disable @typescript-eslint/camelcase */
@@ -127,7 +136,15 @@ class DiscordService {
         },
       };
 
-      const url = `/guilds/${123}/members/${user.id}`;
+      const url = `/guilds/${DISCORD_GUILD_ID}/members/${user.id}`;
+      Logger.Imp(
+        {
+          url,
+          config,
+          requestData,
+        },
+        true,
+      );
 
       const putResponse = await this.instance.put(url, requestData, config);
 
@@ -144,7 +161,9 @@ class DiscordService {
       await Promise.all(roleAssignments);
       return true;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
+      Logger.Err(e, true);
+      if (e instanceof NoAccessTokenError || e.response.status === 401 || e.response.status === 403) {
+        Logger.Warn(e, true);
         throw new ExpiredAccessTokenError();
       } else {
         throw new Error(e);

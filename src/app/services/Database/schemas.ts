@@ -11,7 +11,7 @@ export interface GroupsSchema {
 }
 
 export interface PositionGroupsSchema {
-  role_id: string;
+  role_id: number;
   name: string;
 }
 

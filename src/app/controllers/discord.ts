@@ -114,10 +114,26 @@ class DiscordController {
     }
   }
 
+  private async roles(jobTitle: string, groups: string[]) {
+    const db = Database.getInstance();
+    try {
+      const positionGroup = (await db.getPositionGroup(jobTitle)).map(group => ({
+        name: group.name,
+        id: group.role,
+      }));
+      const roleGroups = (await db.findGroups(groups)).map(group => ({
+        name: group.discordRoleName,
+        id: group.discordRoleId,
+      }));
+
+      return [...positionGroup, ...roleGroups];
+    } catch (e) {
+      throw e;
+    }
+  }
+
   @Get('roles')
   public async getRoles(req: Request, res: Response) {
-    const db = Database.getInstance();
-
     if (!req.session) {
       return res
         .status(INTERNAL_SERVER_ERROR)
@@ -133,16 +149,54 @@ class DiscordController {
     }
 
     try {
-      const positionGroup = await db.getPositionGroup(req.session.jobTitle);
-      const groups = await db.findGroups(req.session.groups);
-
-      const roles = [...positionGroup.map(posGroup => posGroup.name), ...groups.map(group => group.discordRoleName)];
+      const roles = (await this.roles(req.session.jobTitle, req.session.groups)).map(group => group.name);
 
       return res
         .status(OK)
         .json({ roles })
         .end();
     } catch (e) {
+      Logger.Err(e, true);
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send('Unknown Error Occurred')
+        .end();
+    }
+  }
+
+  @Get('enrol')
+  public async enrol(req: Request, res: Response) {
+    if (!req.session) {
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send('Session failed to initialize.')
+        .end();
+    }
+
+    if (!req.session.groups && !req.session.jobTitle) {
+      return res
+        .status(BAD_REQUEST)
+        .send('Missing Azure AD keys')
+        .end();
+    }
+
+    try {
+      const roles = (await this.roles(req.session.jobTitle, req.session.groups)).map(group => group.id);
+
+      const enrolmentResult = await this.discordService.enroll(
+        roles,
+        req.user ? (req.user as { displayName: string }).displayName : undefined,
+      );
+
+      if (enrolmentResult) {
+        return res.status(OK).send('Successfully enrolled.');
+      } else {
+        throw new Error('User enrollment failed');
+      }
+    } catch (e) {
+      if (e instanceof ExpiredAccessTokenError) {
+        return res.status(UNAUTHORIZED).send('Token Expired');
+      }
       Logger.Err(e, true);
       return res
         .status(INTERNAL_SERVER_ERROR)

@@ -23,4 +23,5 @@ COPY --from=server-builder /usr/app/src/lib ./lib
 RUN yarn install --frozen-lockfile --production=true
 EXPOSE 3000
 ENV PORT 3000
+ENV production true
 CMD ["node", "./lib/index.js"]

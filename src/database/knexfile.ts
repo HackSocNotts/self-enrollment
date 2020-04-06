@@ -3,7 +3,9 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-require('ts-node/register');
+if (!process.env.production) {
+  require('ts-node/register');
+}
 
 export const client = 'mssql';
 export const connection = {

@@ -21,6 +21,10 @@ export const GET_ROLES = '[Discord] GET_ROLE';
 export const START_GET_ROLES = '[Discord] START_GET_ROLE';
 export const GET_ROLES_SUCCESS = '[Discord] GET_ROLE_SUCCESS';
 export const GET_ROLES_FAILED = '[Discord] GET_ROLE_FAILED';
+export const ENROL = '[Discord] ENROL';
+export const START_ENROL = '[Discord] START_ENROL';
+export const ENROL_SUCCESS = '[Discord] ENROL_SUCCESS';
+export const ENROL_FAILED = '[Discord] ENROL_FAILED';
 
 export const Actions = {
   getRedirectURI: () => createAction(GET_REDIRECT_URI),
@@ -35,6 +39,10 @@ export const Actions = {
   startGetRoles: () => createAction(START_GET_ROLES),
   getRolesSuccess: (roles: string[]) => createAction(GET_ROLES_SUCCESS, { roles }),
   getRolesFailed: (error: string) => createAction(GET_ROLES_FAILED, { error }),
+  enrol: () => createAction(ENROL),
+  startEnrol: () => createAction(START_ENROL),
+  enrolSuccess: () => createAction(ENROL_SUCCESS),
+  enrolFailed: (error: string) => createAction(ENROL_FAILED, { error }),
 };
 
 export const Thunks = {
@@ -47,7 +55,7 @@ export const Thunks = {
         const redirectURI = await apiService.getDiscordReturnURI();
         dispatch(Actions.getRedirectURISuccess(redirectURI));
       } catch (err) {
-        dispatch(Actions.getRedirectURIFailed(err.getMessage()));
+        dispatch(Actions.getRedirectURIFailed(err.message));
       }
     }),
   getProfile: () =>
@@ -62,7 +70,7 @@ export const Thunks = {
         if ((err as FetchDiscordProfileError).profileExists === false) {
           dispatch(Actions.getProfileSuccess(false));
         } else {
-          dispatch(Actions.getProfileFailed(err.getMessage()));
+          dispatch(Actions.getProfileFailed(err.message));
         }
       }
     }),
@@ -75,7 +83,19 @@ export const Thunks = {
         const roles = await apiService.getRoles();
         dispatch(Actions.getRolesSuccess(roles));
       } catch (err) {
-        dispatch(Actions.getRolesFailed(err.getMessage()));
+        dispatch(Actions.getRolesFailed(err.message));
+      }
+    }),
+  enrol: () =>
+    createThunkAction(async dispatch => {
+      const apiService = APIService.getInstance();
+      dispatch(Actions.enrol());
+      try {
+        dispatch(Actions.startEnrol());
+        await apiService.enrol();
+        dispatch(Actions.enrolSuccess());
+      } catch (err) {
+        dispatch(Actions.enrolFailed(err.message));
       }
     }),
 };

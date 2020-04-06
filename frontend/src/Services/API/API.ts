@@ -65,6 +65,22 @@ class APIService {
       }
     }
   }
+
+  public async enrol() {
+    try {
+      await this.instance.get('/discord/enrol');
+      return;
+    } catch (e) {
+      const status = (e as AxiosError).response ? e.response.status : 500;
+      if (status === 401) {
+        throw new Error('Token has expired, please refresh the page.');
+      } else if (status === 400) {
+        throw new Error('Token is invalid. Please refresh the page.');
+      } else {
+        throw new Error('An Unknown Error Occurred. Please try again later.');
+      }
+    }
+  }
 }
 
 export default APIService;

@@ -15,9 +15,10 @@ export interface ServiceCardProps {
   loading: boolean;
   profile?: ProfileProps;
   message?: React.ReactNode;
+  enrolFunction?: () => void;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ platform, loginURL, loading, profile, message }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ platform, loginURL, loading, profile, message, enrolFunction }) => {
   const classes = useStyles();
 
   return (
@@ -35,7 +36,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ platform, loginURL, loading, 
             Login to {platform}
           </Button>
         )}
-        {profile && <Button size="small">Enroll</Button>}
+        {profile && enrolFunction && (
+          <Button size="small" onClick={enrolFunction}>
+            Enroll
+          </Button>
+        )}
       </CardActions>
     </Card>
   );

@@ -11,6 +11,8 @@ const DiscordServiceCard: React.FC = () => {
   const dispatch = useDispatch();
   const { redirectURI, loading, profile } = useSelector((state: AppState) => state.discord);
 
+  const enrolFunction = () => dispatch(Thunks.enrol());
+
   const cardProfile: Optional<ProfileProps> = profile
     ? {
         username: `${profile.username}#${profile.discriminator}`,
@@ -33,6 +35,7 @@ const DiscordServiceCard: React.FC = () => {
       loading={loading}
       profile={cardProfile}
       message={<Message />}
+      enrolFunction={enrolFunction}
     />
   );
 };

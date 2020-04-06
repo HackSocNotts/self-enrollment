@@ -17,6 +17,9 @@ import {
   START_GET_ROLES,
   GET_ROLES_SUCCESS,
   GET_ROLES_FAILED,
+  START_ENROL,
+  ENROL_SUCCESS,
+  ENROL_FAILED,
 } from './actions';
 
 export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
@@ -90,6 +93,30 @@ export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
     }
 
     case GET_ROLES_FAILED: {
+      const { error } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        error,
+      };
+    }
+
+    case START_ENROL: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case ENROL_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        enrolSuccess: true,
+      };
+    }
+
+    case ENROL_FAILED: {
       const { error } = action.payload;
       return {
         ...state,

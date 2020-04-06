@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import Router from './Router';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import HeaderBar from '../components/HeaderBar';
 import Footer from '../components/Footer';
+import theme from './theme';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
 
 export interface AppProps {
   version?: string;
@@ -14,13 +16,13 @@ const App: React.FC<AppProps> = ({ version }) => {
   });
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
         <HeaderBar />
       </Router>
       <Footer />
-    </>
+    </ThemeProvider>
   );
 };
 

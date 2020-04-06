@@ -16,15 +16,28 @@ export interface ServiceCardProps {
   profile?: ProfileProps;
   message?: React.ReactNode;
   enrolFunction?: () => void;
+  info?: string;
+  error?: string;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ platform, loginURL, loading, profile, message, enrolFunction }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({
+  platform,
+  loginURL,
+  loading,
+  profile,
+  message,
+  enrolFunction,
+  info,
+  error,
+}) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root} variant="outlined">
       {loading && <LinearProgress />}
       <CardHeader title={platform} />
+      {!error && info && <CardContent className={classes.info}>{info}</CardContent>}
+      {error && <CardContent className={classes.error}>{error}</CardContent>}
       {profile && <Profile {...profile} />}
       <CardContent>
         {!profile && <Typography>Login with {platform} below to enroll.</Typography>}
@@ -32,12 +45,12 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ platform, loginURL, loading, 
       </CardContent>
       <CardActions>
         {loginURL && !profile && (
-          <Button size="small" component={Link} href={loginURL}>
+          <Button size="small" component={Link} href={loginURL} disabled={loading}>
             Login to {platform}
           </Button>
         )}
         {profile && enrolFunction && (
-          <Button size="small" onClick={enrolFunction}>
+          <Button size="small" onClick={enrolFunction} disabled={loading}>
             Enroll
           </Button>
         )}

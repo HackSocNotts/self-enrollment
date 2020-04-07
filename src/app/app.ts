@@ -22,6 +22,7 @@ import { Server } from '@overnightjs/core';
 import session from 'express-session';
 import { SESSION_SECRET } from '../config';
 import shouldAuthenticate from './middleware/shouldAuthenticate';
+import StatusController from './controllers/status';
 
 class SelfEnrollmentServer extends Server {
   public constructor() {
@@ -61,8 +62,13 @@ class SelfEnrollmentServer extends Server {
   private setupControllers() {
     const discordController = new DiscordController();
     const authController = new AuthController();
+    const statusController = new StatusController();
 
-    super.addControllers([authController, discordController], undefined, (errors() as unknown) as RequestHandler);
+    super.addControllers(
+      [authController, discordController, statusController],
+      undefined,
+      (errors() as unknown) as RequestHandler,
+    );
   }
 
   public start(port: number) {

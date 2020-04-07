@@ -170,6 +170,21 @@ class DiscordService {
       }
     }
   }
+
+  public async status() {
+    const config: AxiosRequestConfig = {
+      headers: {
+        Authorization: 'Bot ' + this.botToken,
+      },
+    };
+
+    try {
+      await this.instance.get('/users/@me', config);
+      return;
+    } catch (e) {
+      throw e;
+    }
+  }
 }
 
 export default DiscordService;

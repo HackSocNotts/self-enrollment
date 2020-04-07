@@ -96,6 +96,15 @@ class Database {
       throw err;
     }
   }
+
+  public async checkConnection() {
+    try {
+      await this.db.raw('select 1+1 as result');
+      return;
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default Database;

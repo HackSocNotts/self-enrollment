@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { Controller, Get } from '@overnightjs/core';
-import { INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
+import { OK, SERVICE_UNAVAILABLE } from 'http-status-codes';
 import { Request, Response } from 'express';
 import Axios from 'axios';
 import { BASE_URL } from '../../config';
@@ -61,7 +61,7 @@ class StatusController {
       healthy = false;
     }
 
-    return res.status(healthy ? OK : INTERNAL_SERVER_ERROR).json({
+    return res.status(healthy ? OK : SERVICE_UNAVAILABLE).json({
       healthy,
       database,
       discord,

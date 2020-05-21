@@ -3,11 +3,14 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import { config } from 'dotenv';
+config({ path: '../../.env' });
+
 if (!process.env.production) {
   require('ts-node/register');
 }
 
-export const client = 'mssql';
+export const client = process.env.DB_CLIENT;
 export const connection = {
   server: process.env.DB_HOST,
   user: process.env.DB_USER,

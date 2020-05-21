@@ -14,7 +14,9 @@
     "knex:migrate:latest": "knex --knexfile src/database/knexfile.ts migrate:latest",
     "knex:migrate:rollback": "knex --knexfile src/database/knexfile.ts migrate:rollback",
     "knex:migrate:up": "knex --knexfile src/database/knexfile.ts migrate:up",
-    "knex:migrate:down": "knex --knexfile src/database/knexfile.ts migrate:down"
+    "knex:migrate:down": "knex --knexfile src/database/knexfile.ts migrate:down",
+    "knex:seed:make": "knex --knexfile src/database/knexfile.ts seed:make",
+    "knex:seed:run": "knex --knexfile src/database/knexfile.ts seed:run"
   },
   "engines": {
     "node": "12"

@@ -3,6 +3,10 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import { config } from 'dotenv';
+
+if (!process.env.production) config();
+
 // App Configuration
 export const BASE_URL = process.env.BASE_URL as string;
 

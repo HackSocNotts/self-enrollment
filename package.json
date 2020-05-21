@@ -23,6 +23,8 @@
   "dependencies": {
     "@hapi/joi": "^15.1.0",
     "@microsoft/microsoft-graph-client": "^2.0.0",
+    "@octokit/auth-app": "^2.4.5",
+    "@octokit/rest": "^17.9.2",
     "@overnightjs/core": "^1.6.15",
     "@overnightjs/logger": "^1.1.10",
     "@types/bunyan": "^1.8.6",

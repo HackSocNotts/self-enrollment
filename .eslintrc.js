@@ -23,11 +23,12 @@ module.exports = {
       },
     },
     {
-      files: ['src/database/migrations/**'],
+      files: ['src/database/migrations/**', 'src/database/seeds/**'],
       rules: {
         'jsdoc/require-returns': 0,
         'jsdoc/require-param-description': 0,
         '@typescript-eslint/no-explicit-any': 0,
+        '@typescript-eslint/camelcase': 0,
       },
     },
   ],

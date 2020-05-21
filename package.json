@@ -6,15 +6,15 @@
     "lint:fix": "npm run lint -- --fix",
     "pretest": "npm run lint",
     "build": "tsc",
-    "start": "export $(grep -v '^#' ./.env) && tsc-watch --onSuccess 'node lib/index.js'",
+    "start": "tsc-watch --onSuccess \"node lib/index.js\"",
     "test": "jest --watchAll=false --verbose=false",
     "test:watch": "jest --watchAll --verbose=false",
     "setEnv": "export $(grep -v '^#' ./.env)",
-    "knex:migrate:make": "export $(grep -v '^#' ./.env) && knex --knexfile src/database/knexfile.ts -x ts migrate:make",
-    "knex:migrate:latest": "export $(grep -v '^#' ./.env) && knex --knexfile src/database/knexfile.ts migrate:latest",
-    "knex:migrate:rollback": "export $(grep -v '^#' ./.env) && knex --knexfile src/database/knexfile.ts migrate:rollback",
-    "knex:migrate:up": "export $(grep -v '^#' ./.env) && knex --knexfile src/database/knexfile.ts migrate:up",
-    "knex:migrate:down": "export $(grep -v '^#' ./.env) && knex --knexfile src/database/knexfile.ts migrate:down"
+    "knex:migrate:make": "knex --knexfile src/database/knexfile.ts -x ts migrate:make",
+    "knex:migrate:latest": "knex --knexfile src/database/knexfile.ts migrate:latest",
+    "knex:migrate:rollback": "knex --knexfile src/database/knexfile.ts migrate:rollback",
+    "knex:migrate:up": "knex --knexfile src/database/knexfile.ts migrate:up",
+    "knex:migrate:down": "knex --knexfile src/database/knexfile.ts migrate:down"
   },
   "engines": {
     "node": "12"
@@ -35,6 +35,7 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "deep-object-diff": "^1.1.0",
+    "dotenv": "^8.2.0",
     "es6-promise": "^4.2.8",
     "express": "^4.17.1",
     "express-session": "^1.17.0",

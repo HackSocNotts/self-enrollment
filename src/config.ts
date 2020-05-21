@@ -3,6 +3,10 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import { config } from 'dotenv';
+
+if (!process.env.production) config();
+
 // App Configuration
 export const BASE_URL = process.env.BASE_URL as string;
 
@@ -22,3 +26,5 @@ export const AAD_CLIENT_SECRET = process.env.AAD_CLIENT_SECRET;
 export const AAD_TENNANT_ID = process.env.AAD_TENNANT_ID;
 export const AAD_ISSUER = process.env.AAD_ISSUER;
 export const AAD_APPIDURI = process.env.AAD_APPIDURI;
+
+//GitHub

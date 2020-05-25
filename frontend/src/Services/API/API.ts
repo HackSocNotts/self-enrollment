@@ -6,6 +6,7 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { DiscordProfile, DiscordRoles } from '../../models/DiscordProfile';
 import { FetchDiscordProfileError } from './errors';
+import { GitHubProfile, GitHubTeams } from '../../models/GitHubProfile';
 
 class APIService {
   private static _instance: APIService;
@@ -75,6 +76,48 @@ class APIService {
       if (status === 401) {
         throw new Error('Token has expired, please refresh the page.');
       } else if (status === 400) {
+        throw new Error('Token is invalid. Please refresh the page.');
+      } else {
+        throw new Error('An Unknown Error Occurred. Please try again later.');
+      }
+    }
+  }
+
+  public async getGitHubProfile() {
+    try {
+      const response = await this.instance.get<GitHubProfile>('/github/whoami');
+      return response.data;
+    } catch (e) {
+      const status = (e as AxiosError).response ? e.response.status : 500;
+      if (status === 400) {
+        throw new Error('Token is invalid. Please refresh the page.');
+      } else {
+        throw new Error('An Unknown Error Occurred. Please try again later.');
+      }
+    }
+  }
+
+  public async getGetHubTeams() {
+    try {
+      const response = await this.instance.get<GitHubTeams>('/github/teams');
+      return response.data.teams;
+    } catch (e) {
+      const status = (e as AxiosError).response ? e.response.status : 500;
+      if (status === 400) {
+        throw new Error('Token is invalid. Please refresh the page.');
+      } else {
+        throw new Error('An Unknown Error Occurred. Please try again later.');
+      }
+    }
+  }
+
+  public async gitHubEnrol() {
+    try {
+      await this.instance.get('/github/enrol');
+      return;
+    } catch (e) {
+      const status = (e as AxiosError).response ? e.response.status : 500;
+      if (status === 400) {
         throw new Error('Token is invalid. Please refresh the page.');
       } else {
         throw new Error('An Unknown Error Occurred. Please try again later.');

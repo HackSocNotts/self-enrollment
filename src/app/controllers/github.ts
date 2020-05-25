@@ -1,15 +1,12 @@
 // Copyright (c) 2020 HackSoc Nottingham
-
 //
-
 // This software is released under the MIT License.
-
 // https://opensource.org/licenses/MIT
 
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
 import { ClassMiddleware, Controller, Get } from '@overnightjs/core';
-import { INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
+import GitHubService, { GitHubOauthService } from '../services/GitHub';
 import { Request, Response } from 'express';
-import GitHubService from '../services/GitHub';
 import isAuthenticated from '../middleware/isAuthenticated';
 import { Logger } from '@overnightjs/logger';
 
@@ -37,6 +34,33 @@ class GitHubController {
       return res
         .status(INTERNAL_SERVER_ERROR)
         .send('Unknown Error Occurred')
+        .end();
+    }
+  }
+
+  @Get('whoami')
+  public async whoami(req: Request, res: Response) {
+    if (!req.session || !req.session.gitHubToken) {
+      Logger.Info('No GitHub Token in Session');
+      return res
+        .status(BAD_REQUEST)
+        .send('Missing GitHub Token. Please authenticate.')
+        .end();
+    }
+
+    const githubOauthService = new GitHubOauthService(req.session.gitHubToken);
+
+    try {
+      const profile = await githubOauthService.getProfile();
+      return res
+        .status(OK)
+        .json(profile)
+        .end();
+    } catch (e) {
+      Logger.Err(e, true);
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send('Server Error Occured.')
         .end();
     }
   }

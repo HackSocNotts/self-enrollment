@@ -20,47 +20,44 @@
  */
 
 import React from 'react';
-import ServiceCard from '../ServiceCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppState } from '../../store/AppState';
+import Typography from '@material-ui/core/Typography';
 import { Thunks } from '../../store/github/actions';
-import { ProfileProps } from '../Profile';
-import { Optional } from '../../utils/types';
-import Message from './GitHubServiceCardMessage';
+import { AppState } from '../../store/AppState';
 
-const GitHubServiceCard = () => {
+const Message: React.FC = () => {
   const dispatch = useDispatch();
-  const { loading, profile, error, enrolSuccess, attempts } = useSelector((state: AppState) => state.github);
+  const { loading, profile, teams, attempts } = useSelector((state: AppState) => state.github);
+  if (!profile && !teams) {
+    return <></>;
+  }
 
-  const info = enrolSuccess ? 'Enrolled successfully!' : undefined;
+  if (profile && !teams && !loading && attempts < 5) {
+    dispatch(Thunks.getTeams());
+    return <></>;
+  }
 
-  const enrolFunction = () => dispatch(Thunks.enrol());
-
-  const cardProfile: Optional<ProfileProps> = profile
-    ? {
-        name: profile.name,
-        username: profile.login,
-        usernameIdentifier: '@',
-        imageURL: profile.avatar_url,
-      }
-    : undefined;
-
-  if (profile === undefined && !loading && attempts < 5) {
-    dispatch(Thunks.getProfile());
+  if (!teams) {
+    return <></>;
   }
 
   return (
-    <ServiceCard
-      platform="GitHub"
-      loginURL="/api/github/oauth/start"
-      loading={loading}
-      profile={cardProfile}
-      message={<Message />}
-      enrolFunction={!enrolSuccess ? enrolFunction : undefined}
-      info={info}
-      error={error}
-    />
+    <>
+      <Typography>
+        If the user above is correct, click enroll below to invite the user and assign the following teams:
+      </Typography>
+      <ul>
+        {teams.map(team => (
+          <li key={team}>
+            <Typography>{team}</Typography>
+          </li>
+        ))}
+      </ul>
+      <Typography>
+        In addition, to adding the user to the teams, you HackSoc email will be added to your account.
+      </Typography>
+    </>
   );
 };
 
-export default GitHubServiceCard;
+export default Message;

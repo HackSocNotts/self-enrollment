@@ -90,7 +90,7 @@ class APIService {
     } catch (e) {
       const status = (e as AxiosError).response ? e.response.status : 500;
       if (status === 400) {
-        throw new Error('Token is invalid. Please refresh the page.');
+        throw new FetchGitHubProfileError('Token is invalid. Please refresh the page.', false);
       } else {
         throw new Error('An Unknown Error Occurred. Please try again later.');
       }
@@ -104,7 +104,7 @@ class APIService {
     } catch (e) {
       const status = (e as AxiosError).response ? e.response.status : 500;
       if (status === 400) {
-        throw new FetchGitHubProfileError('Token is invalid. Please refresh the page.', false);
+        throw new Error('Token is invalid. Please refresh the page.');
       } else {
         throw new Error('An Unknown Error Occurred. Please try again later.');
       }

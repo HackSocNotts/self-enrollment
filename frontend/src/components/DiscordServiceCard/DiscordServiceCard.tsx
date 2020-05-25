@@ -9,7 +9,9 @@ import Message from './DiscordServiceCardMessage';
 
 const DiscordServiceCard: React.FC = () => {
   const dispatch = useDispatch();
-  const { redirectURI, loading, profile, error, enrolSuccess } = useSelector((state: AppState) => state.discord);
+  const { redirectURI, loading, profile, error, enrolSuccess, attempts } = useSelector(
+    (state: AppState) => state.discord,
+  );
 
   const info = enrolSuccess ? 'Enrolled successfully!' : undefined;
 
@@ -22,11 +24,11 @@ const DiscordServiceCard: React.FC = () => {
       }
     : undefined;
 
-  if (profile === undefined && !loading) {
+  if (profile === undefined && !loading && attempts < 5) {
     dispatch(Thunks.getProfile());
   }
 
-  if (profile === false && !redirectURI && !loading) {
+  if (profile === false && !redirectURI && !loading && attempts < 5) {
     dispatch(Thunks.getRedirectURI());
   }
 

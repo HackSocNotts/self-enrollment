@@ -15,7 +15,7 @@ class APIService {
   private constructor() {
     this.instance = axios.create({
       baseURL: '/api',
-      timeout: 1000,
+      timeout: 10000,
     });
   }
 

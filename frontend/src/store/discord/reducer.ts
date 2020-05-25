@@ -38,6 +38,7 @@ export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
       return {
         ...state,
         loading: false,
+        attempts: 0,
         redirectURI,
       };
     }
@@ -47,6 +48,7 @@ export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
       return {
         ...state,
         loading: false,
+        attempts: state.attempts + 1,
         error,
       };
     }
@@ -63,6 +65,7 @@ export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
       return {
         ...state,
         loading: false,
+        attempts: 0,
         profile,
       };
     }
@@ -72,6 +75,7 @@ export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
       return {
         ...state,
         loading: false,
+        attempts: state.attempts + 1,
         error,
       };
     }
@@ -88,6 +92,7 @@ export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
       return {
         ...state,
         loading: false,
+        attempts: 0,
         roles,
       };
     }
@@ -97,6 +102,7 @@ export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
       return {
         ...state,
         loading: false,
+        attempts: state.attempts + 1,
         error,
       };
     }
@@ -112,6 +118,7 @@ export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
       return {
         ...state,
         loading: false,
+        attempts: 0,
         enrolSuccess: true,
       };
     }
@@ -121,6 +128,7 @@ export const reducer: Reducer<DiscordState, Actions> = (state, action) => {
       return {
         ...state,
         loading: false,
+        attempts: state.attempts + 1,
         error,
       };
     }

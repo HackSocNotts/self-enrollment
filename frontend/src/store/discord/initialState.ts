@@ -13,4 +13,5 @@ export default {
   profile: undefined as Optional<DiscordProfile | false>,
   roles: undefined as Optional<string[]>,
   enrolSuccess: false,
+  attempts: 0,
 };

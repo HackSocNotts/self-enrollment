@@ -80,7 +80,7 @@ export const Thunks = {
       dispatch(Actions.getRoles());
       try {
         dispatch(Actions.startGetRoles());
-        const roles = await apiService.getRoles();
+        const roles = await apiService.getDiscordRoles();
         dispatch(Actions.getRolesSuccess(roles));
       } catch (err) {
         dispatch(Actions.getRolesFailed(err.message));
@@ -92,7 +92,7 @@ export const Thunks = {
       dispatch(Actions.enrol());
       try {
         dispatch(Actions.startEnrol());
-        await apiService.enrol();
+        await apiService.discordEnrol();
         dispatch(Actions.enrolSuccess());
       } catch (err) {
         dispatch(Actions.enrolFailed(err.message));

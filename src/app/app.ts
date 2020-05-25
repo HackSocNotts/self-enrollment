@@ -15,6 +15,8 @@ import cors from 'cors';
 import Database from './services/Database';
 import DiscordController from './controllers/discord';
 import { errors } from 'celebrate';
+import GitHubController from './controllers/github';
+import GitHubOauthController from './controllers/githubOauth';
 import { Logger } from '@overnightjs/logger';
 import passport from 'passport';
 import path from 'path';
@@ -63,9 +65,11 @@ class SelfEnrollmentServer extends Server {
     const discordController = new DiscordController();
     const authController = new AuthController();
     const statusController = new StatusController();
+    const gitHubController = new GitHubController();
+    const gitHubOauthController = new GitHubOauthController();
 
     super.addControllers(
-      [authController, discordController, statusController],
+      [authController, discordController, statusController, gitHubOauthController, gitHubController],
       undefined,
       (errors() as unknown) as RequestHandler,
     );

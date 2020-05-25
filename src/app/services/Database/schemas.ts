@@ -6,12 +6,14 @@
 export interface GroupsSchema {
   uuid: string;
   name: string;
-  discord_role_name: string;
-  discord_role_id: number;
+  discord_role_name?: string;
+  discord_role_id?: number;
+  github_team_slug?: string;
 }
 
 export interface PositionGroupsSchema {
-  role_id: number;
+  role_id?: number;
+  github_team_slug?: string;
   name: string;
 }
 

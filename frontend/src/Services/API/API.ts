@@ -5,7 +5,8 @@
 
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { DiscordProfile, DiscordRoles } from '../../models/DiscordProfile';
-import { FetchDiscordProfileError } from './errors';
+import { FetchDiscordProfileError, FetchGitHubProfileError } from './errors';
+import { GitHubProfile, GitHubTeams } from '../../models/GitHubProfile';
 
 class APIService {
   private static _instance: APIService;
@@ -14,7 +15,7 @@ class APIService {
   private constructor() {
     this.instance = axios.create({
       baseURL: '/api',
-      timeout: 1000,
+      timeout: 10000,
     });
   }
 
@@ -50,7 +51,7 @@ class APIService {
     }
   }
 
-  public async getRoles() {
+  public async getDiscordRoles() {
     try {
       const response = await this.instance.get<DiscordRoles>('/discord/roles');
       return response.data.roles;
@@ -66,7 +67,7 @@ class APIService {
     }
   }
 
-  public async enrol() {
+  public async discordEnrol() {
     try {
       await this.instance.get('/discord/enrol');
       return;
@@ -75,6 +76,48 @@ class APIService {
       if (status === 401) {
         throw new Error('Token has expired, please refresh the page.');
       } else if (status === 400) {
+        throw new Error('Token is invalid. Please refresh the page.');
+      } else {
+        throw new Error('An Unknown Error Occurred. Please try again later.');
+      }
+    }
+  }
+
+  public async getGitHubProfile() {
+    try {
+      const response = await this.instance.get<GitHubProfile>('/github/whoami');
+      return response.data;
+    } catch (e) {
+      const status = (e as AxiosError).response ? e.response.status : 500;
+      if (status === 400) {
+        throw new FetchGitHubProfileError('Token is invalid. Please refresh the page.', false);
+      } else {
+        throw new Error('An Unknown Error Occurred. Please try again later.');
+      }
+    }
+  }
+
+  public async getGitHubTeams() {
+    try {
+      const response = await this.instance.get<GitHubTeams>('/github/teams');
+      return response.data.teams;
+    } catch (e) {
+      const status = (e as AxiosError).response ? e.response.status : 500;
+      if (status === 400) {
+        throw new Error('Token is invalid. Please refresh the page.');
+      } else {
+        throw new Error('An Unknown Error Occurred. Please try again later.');
+      }
+    }
+  }
+
+  public async gitHubEnrol() {
+    try {
+      await this.instance.get('/github/enrol');
+      return;
+    } catch (e) {
+      const status = (e as AxiosError).response ? e.response.status : 500;
+      if (status === 400) {
         throw new Error('Token is invalid. Please refresh the page.');
       } else {
         throw new Error('An Unknown Error Occurred. Please try again later.');

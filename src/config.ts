@@ -28,3 +28,9 @@ export const AAD_ISSUER = process.env.AAD_ISSUER;
 export const AAD_APPIDURI = process.env.AAD_APPIDURI;
 
 //GitHub
+export const GITHUB_APP_ID = process.env.GITHUB_APP_ID as string;
+export const GITHUB_PRIVATE_KEY = process.env.GITHUB_PRIVATE_KEY as string;
+export const GITHUB_INSTALLATION_ID = process.env.GITHUB_INSTALLATION_ID as string;
+export const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID as string;
+export const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET as string;
+export const GITHUB_ORGANISATION = process.env.GITHUB_ORGANISATION as string;

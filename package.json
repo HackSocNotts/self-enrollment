@@ -25,6 +25,9 @@
   "dependencies": {
     "@hapi/joi": "^15.1.0",
     "@microsoft/microsoft-graph-client": "^2.0.0",
+    "@octokit/auth-app": "^2.4.5",
+    "@octokit/auth-oauth-app": "^3.0.3",
+    "@octokit/rest": "^17.9.2",
     "@overnightjs/core": "^1.6.15",
     "@overnightjs/logger": "^1.1.10",
     "@types/bunyan": "^1.8.6",
@@ -49,7 +52,8 @@
     "passport-azure-ad": "^4.2.1",
     "pg": "^8.2.1",
     "querystring": "^0.2.0",
-    "sinon": "^7.3.2"
+    "sinon": "^7.3.2",
+    "uuid": "^8.1.0"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.0",
@@ -62,6 +66,7 @@
     "@types/passport": "^1.0.3",
     "@types/passport-azure-ad": "^4.0.4",
     "@types/supertest": "^2.0.8",
+    "@types/uuid": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
     "eslint": "^6.8.0",

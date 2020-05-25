@@ -9,7 +9,9 @@ import Message from './DiscordServiceCardMessage';
 
 const DiscordServiceCard: React.FC = () => {
   const dispatch = useDispatch();
-  const { redirectURI, loading, profile, error, enrolSuccess } = useSelector((state: AppState) => state.discord);
+  const { redirectURI, loading, profile, error, enrolSuccess, attempts } = useSelector(
+    (state: AppState) => state.discord,
+  );
 
   const info = enrolSuccess ? 'Enrolled successfully!' : undefined;
 
@@ -17,16 +19,18 @@ const DiscordServiceCard: React.FC = () => {
 
   const cardProfile: Optional<ProfileProps> = profile
     ? {
-        username: `${profile.username}#${profile.discriminator}`,
+        name: profile.username,
+        username: profile.discriminator,
+        usernameIdentifier: '#',
         imageURL: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png?size=128`,
       }
     : undefined;
 
-  if (profile === undefined && !loading) {
+  if (profile === undefined && !loading && attempts < 5) {
     dispatch(Thunks.getProfile());
   }
 
-  if (profile === false && !redirectURI && !loading) {
+  if (profile === false && !redirectURI && !loading && attempts < 5) {
     dispatch(Thunks.getRedirectURI());
   }
 

@@ -126,7 +126,10 @@ class DiscordController {
         id: group.discordRoleId,
       }));
 
-      return [...positionGroup, ...roleGroups];
+      return [...positionGroup, ...roleGroups].filter(role => !!role.id && !!role.name) as {
+        name: string;
+        id: number;
+      }[];
     } catch (e) {
       throw e;
     }

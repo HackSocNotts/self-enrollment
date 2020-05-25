@@ -22,5 +22,7 @@
     "source.fixAll.eslint": true
   },
   "licenser.author": "HackSoc Nottingham",
-  "files.eol": "\n"
+  "files.eol": "\n",
+  "copyrightInserter.holder": "HackSoc Nottingham",
+  "copyrightInserter.license": "mit"
 }

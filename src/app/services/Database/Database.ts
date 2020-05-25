@@ -74,7 +74,7 @@ class Database {
         return [];
       }
 
-      return [{ role: rows[0].role_id, name: rows[0].name }];
+      return [{ role: rows[0].role_id, name: rows[0].name, gitHubTeam: rows[0].github_team_slug }];
     } catch (err) {
       throw err;
     }
@@ -91,6 +91,7 @@ class Database {
         name: row.name,
         discordRoleName: row.discord_role_name,
         discordRoleId: row.discord_role_id,
+        gitHubTeamSlug: row.github_team_slug,
       }));
     } catch (err) {
       throw err;

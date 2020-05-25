@@ -4,14 +4,13 @@
 // https://opensource.org/licenses/MIT
 
 import { Optional } from '../../utils/types';
-import { DiscordProfile } from '../../models/DiscordProfile';
+import { GitHubProfile } from '../../models/GitHubProfile';
 
 export default {
-  redirectURI: undefined as Optional<string>,
   loading: false,
   error: undefined as Optional<string>,
-  profile: undefined as Optional<DiscordProfile | false>,
-  roles: undefined as Optional<string[]>,
+  profile: undefined as Optional<GitHubProfile | false>,
+  teams: undefined as Optional<string[]>,
   enrolSuccess: false,
   attempts: 0,
 };

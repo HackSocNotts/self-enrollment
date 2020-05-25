@@ -14,6 +14,7 @@ const HomePage: React.FC = () => {
       <div className={classes.container}>
         <Container maxWidth="md" className={classes.innerContainer}>
           <DiscordServiceCard />
+          <GitHubServiceCard />
         </Container>
       </div>
     </>

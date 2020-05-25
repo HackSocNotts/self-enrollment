@@ -37,7 +37,9 @@ const GitHubServiceCard = () => {
 
   const cardProfile: Optional<ProfileProps> = profile
     ? {
-        username: `${profile.name}#${profile.login}`,
+        name: profile.name,
+        username: profile.login,
+        usernameIdentifier: '@',
         imageURL: profile.avatar_url,
       }
     : undefined;

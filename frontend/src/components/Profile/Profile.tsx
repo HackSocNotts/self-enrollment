@@ -4,19 +4,20 @@ import useStyles from './Profile.styles';
 import CardHeader from '@material-ui/core/CardHeader';
 
 export interface ProfileProps {
+  name: string;
   username: string;
+  usernameIdentifier: string;
   imageURL: string;
 }
 
-const Profile: React.FC<ProfileProps> = ({ username, imageURL }) => {
+const Profile: React.FC<ProfileProps> = ({ username, name, usernameIdentifier, imageURL }) => {
   const classes = useStyles();
-  const usernameParts = username.split('#');
 
   return (
     <CardHeader
       avatar={<Avatar alt={username} src={imageURL} className={classes.avatar} />}
-      title={usernameParts[0]}
-      subheader={`#${usernameParts[1]}`}
+      title={name}
+      subheader={`${usernameIdentifier}${username}`}
     />
   );
 };

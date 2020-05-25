@@ -19,7 +19,9 @@ const DiscordServiceCard: React.FC = () => {
 
   const cardProfile: Optional<ProfileProps> = profile
     ? {
-        username: `${profile.username}#${profile.discriminator}`,
+        name: profile.username,
+        username: profile.discriminator,
+        usernameIdentifier: '#',
         imageURL: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png?size=128`,
       }
     : undefined;

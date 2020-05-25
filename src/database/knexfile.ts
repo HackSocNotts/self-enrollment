@@ -7,8 +7,8 @@ import { config } from 'dotenv';
 
 if (!process.env.production) {
   require('ts-node/register');
-  config({ path: '../../.env' });
 }
+config({ path: __dirname + '/../../.env' });
 
 export const client = process.env.DB_CLIENT;
 export const connection = {

@@ -66,6 +66,32 @@ class GitHubService {
   public getToken() {
     return this.token;
   }
+
+  public async addToOrg(username: string) {
+    try {
+      await this.app.orgs.getMembership({
+        org: GITHUB_ORGANISATION,
+        username,
+      });
+
+      return;
+    } catch (e) {
+      return this.app.orgs.addOrUpdateMembership({
+        org: GITHUB_ORGANISATION,
+        username,
+      });
+    }
+  }
+
+  public async addToTeam(team: string, username: string) {
+    /* eslint-disable @typescript-eslint/camelcase */
+    return this.app.teams.addOrUpdateMembershipInOrg({
+      org: GITHUB_ORGANISATION,
+      team_slug: team,
+      username,
+    });
+    /* eslint-enable @typescript-eslint/camelcase */
+  }
 }
 
 export default GitHubService;

@@ -51,7 +51,7 @@ class APIService {
     }
   }
 
-  public async getRoles() {
+  public async getDiscordRoles() {
     try {
       const response = await this.instance.get<DiscordRoles>('/discord/roles');
       return response.data.roles;
@@ -67,7 +67,7 @@ class APIService {
     }
   }
 
-  public async enrol() {
+  public async discordEnrol() {
     try {
       await this.instance.get('/discord/enrol');
       return;

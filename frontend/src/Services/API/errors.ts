@@ -11,3 +11,12 @@ export class FetchDiscordProfileError extends Error {
     this.profileExists = profileExists;
   }
 }
+
+export class FetchGitHubProfileError extends Error {
+  public readonly profileExists: boolean;
+
+  public constructor(message: string, profileExists: boolean) {
+    super(message);
+    this.profileExists = profileExists;
+  }
+}

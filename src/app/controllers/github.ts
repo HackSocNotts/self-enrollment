@@ -93,7 +93,7 @@ class GitHubController {
         .end();
     }
 
-    if (!req.session.groups && !req.session.jobTitle) {
+    if (!req.session.groups || !req.session.jobTitle) {
       return res
         .status(BAD_REQUEST)
         .send('Missing Azure AD keys')
@@ -107,6 +107,59 @@ class GitHubController {
         .status(OK)
         .json({ teams })
         .end();
+    } catch (e) {
+      Logger.Err(e, true);
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send('Unknown Error Occurred')
+        .end();
+    }
+  }
+
+  @Get('enrol')
+  public async enrol(req: Request, res: Response) {
+    if (!req.session) {
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send('Session failed to initialize.')
+        .end();
+    }
+
+    if (!req.session.groups || !req.session.jobTitle || !req.user) {
+      return res
+        .status(BAD_REQUEST)
+        .send('Missing Azure AD keys')
+        .end();
+    }
+
+    if (!req.session || !req.session.gitHubToken) {
+      Logger.Info('No GitHub Token in Session');
+      return res
+        .status(BAD_REQUEST)
+        .send('Missing GitHub Token. Please authenticate.')
+        .end();
+    }
+
+    try {
+      const githubOauthService = new GitHubOauthService(req.session.gitHubToken);
+      const { login: username } = await githubOauthService.getProfile();
+      const { username: email } = req.user as { username: string };
+      const teams = (await this.teams(req.session.jobTitle, req.session.groups)).map(team => team.slug);
+
+      await this.gitHubService.addToOrg(username);
+      Logger.Info(`Added ${username} to GitHub Organisation`);
+
+      for (const team of teams) {
+        await this.gitHubService.addToTeam(team, username);
+        Logger.Info(`Added ${username} to GitHub team: ${team}`);
+      }
+
+      await githubOauthService.addEmail(email);
+      Logger.Info(`Added ${email} to ${username}'s GitHub account`);
+      await githubOauthService.acceptInvitation();
+      Logger.Info(`Accepted ${username}'s GitHub Organisation Invitation`);
+
+      return res.status(OK).send('Successfully enrolled.');
     } catch (e) {
       Logger.Err(e, true);
       return res

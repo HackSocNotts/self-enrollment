@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { BASE_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '../../../config';
+import { BASE_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_ORGANISATION } from '../../../config';
 import { createOAuthAppAuth } from '@octokit/auth-oauth-app';
 import { NoTokenError } from './errors';
 import { OAuthAccesTokenAuthentication } from '@octokit/auth-app/dist-types/types';
@@ -76,6 +76,19 @@ class GitHubOAuthService {
     } catch (e) {
       throw e;
     }
+  }
+
+  public async addEmail(email: string) {
+    return this.app.users.addEmails({
+      emails: [email],
+    });
+  }
+
+  public async acceptInvitation() {
+    return this.app.orgs.updateMembership({
+      org: GITHUB_ORGANISATION,
+      state: 'active',
+    });
   }
 }
 

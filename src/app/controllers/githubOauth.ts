@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR, OK } from 'http-status-codes';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import { Controller, Get } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { GitHubOauthService } from '../services/GitHub';
@@ -55,10 +55,7 @@ class GitHubOauthController {
 
       req.session.gitHubToken = token;
 
-      return res
-        .status(OK)
-        .send(token)
-        .end();
+      return res.redirect('/');
     } catch (e) {
       Logger.Err(e, true);
       return res

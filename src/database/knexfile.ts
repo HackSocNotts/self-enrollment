@@ -4,15 +4,15 @@
 // https://opensource.org/licenses/MIT
 
 import { config } from 'dotenv';
-config({ path: '../../.env' });
 
 if (!process.env.production) {
   require('ts-node/register');
+  config({ path: '../../.env' });
 }
 
 export const client = process.env.DB_CLIENT;
 export const connection = {
-  server: process.env.DB_HOST,
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
@@ -27,7 +27,10 @@ export const pool = {
 };
 export const migrations = {
   tableName: 'knex_migrations',
-  directory: 'migrations',
+  directory: __dirname + '/migrations',
+};
+export const seeds = {
+  directory: __dirname + '/seeds',
 };
 export const timezone = 'UTC';
 

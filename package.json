@@ -42,7 +42,7 @@
     "deep-object-diff": "^1.1.0",
     "dotenv": "^8.2.0",
     "es6-promise": "^4.2.8",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.17.0",
     "http-status-codes": "^1.4.0",
     "isomorphic-fetch": "^2.2.1",
